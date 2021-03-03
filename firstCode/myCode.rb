@@ -10,3 +10,5 @@ when 3
   p "That's a 3!"
 else p "IDK MATE"
 end
+
+p "Just testing this"

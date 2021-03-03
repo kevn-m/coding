@@ -71,6 +71,7 @@ while $in_combat == true
     when "run"
       puts "YOU RUN AWAY"
       $in_combat = false
+      break
   end
   $in_combat = false
   end

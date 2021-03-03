@@ -7,21 +7,30 @@ class Player
     @damage = damage
   end
 
-  def is_alive
+  def player_alive
     if @hitpoints > 0
       return true
-    elsif @hitpoints < 0
+    elsif @hitpoints <= 0
       return false
     end
   end
 end
 
-# Create a class of snakes with 2 attributes
+# Create a class of snakes with 3 attributes
 class Snake
-  attr_accessor :hitpoints, :damage
-  def initialize(hitpoints, damage)
+  attr_accessor :name, :hitpoints, :damage
+  def initialize(name, hitpoints, damage)
+  @name = name
   @hitpoints = hitpoints
   @damage = damage
+  end
+
+  def snake_alive
+    if @hitpoints > 0
+      return true
+    elsif @hitpoints <= 0
+      return false
+    end
   end
 end
 
@@ -31,7 +40,6 @@ def combat_check
   input = gets.chomp.downcase
   if input == "fight"
     $in_combat = true
-    puts "You are in combat."
   elsif input == "run"
     $in_combat = false
     puts "You've run away."
@@ -46,36 +54,47 @@ player1 = Player.new(playername, 100, 5)
 $in_combat = false
 
 puts "You are on a journey. Please type your responses as you go.\n.\n.\n."
-puts "Oh no! There's a snake in front of you."
-
 
 # Creates the first snake enemy - relatively weak with 10hp and 2dmg
-first_snake = Snake.new(10, 2)
+first_snake = Snake.new("Brown Snake", 10, 10)
+puts "Oh no! There's a #{first_snake.name} in front of you."
 combat_check
 
-
-# created some logic to choose to attack or run from snake
-while $in_combat == true
-  while first_snake.hitpoints > 0
-    puts "You're in battle with the Snake.\nIt currently has #{first_snake.hitpoints} hitpoints.\nYou have #{player1.hitpoints} hitpoints.\nWill you ATTACK or DO NOTHING or RUN?"
+if $in_combat == true
+  puts "In combat with #{first_snake.name}"
+  while player1.player_alive == true
+    #get input
+    puts "ATTACK or RUN"
     input = gets.chomp.downcase
-  case input
-    when "attack"
-      puts "ATTACKING..."
-      player1.hitpoints = player1.hitpoints - first_snake.damage
-      first_snake.hitpoints = first_snake.hitpoints - player1.damage
-      puts "Snake bit you for #{first_snake.damage}. You now have #{player1.hitpoints} hitpoints."
-      puts "You hit the snake for #{player1.damage}. The snake has #{first_snake.hitpoints} hitpoints left."
-    when "do nothing"
-      puts "SNAKE ATTACKS YOU"
-    when "run"
-      puts "YOU RUN AWAY"
-      $in_combat = false
+    # if they run
+    if input == "run"
+      puts "You ran away"
       break
-  end
-  $in_combat = false
+    # if they fight
+    elsif input == "attack"
+      if first_snake.snake_alive == true
+        player1.hitpoints = player1.hitpoints - first_snake.damage
+        first_snake.hitpoints = first_snake.hitpoints - player1.damage
+      puts "You attack the #{first_snake.name} for #{player1.damage} damage."
+      puts "The #{first_snake.name} attacks you for #{first_snake.damage} damage."
+      puts "Your health: #{player1.hitpoints}. #{first_snake.name}'s health: #{first_snake.hitpoints}"
+      puts "Player status: #{player1.player_alive}. #{first_snake.name} status: #{first_snake.snake_alive}"
+      elsif first_snake.snake_alive == false
+        puts "#{first_snake.name} is dead."
+        break
+      end
+    end
   end
 end
 
+
 # CODE FROM HERE IS AFTER user runs away from the snake
-puts "Next level"
+puts "Combat ends"
+
+#check if player is alive
+
+if player1.player_alive == true
+  puts "Congrats next level!"
+elsif player1.player_alive == false
+  puts "You are dead."
+end

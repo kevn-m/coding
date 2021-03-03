@@ -56,40 +56,36 @@ $in_combat = false
 puts "You are on a journey. Please type your responses as you go.\n.\n.\n."
 
 # Creates the first snake enemy - relatively weak with 10hp and 2dmg
-first_snake = Snake.new("Brown Snake", 10, 10)
+first_snake = Snake.new("Brown Snake", 10, 2)
 puts "Oh no! There's a #{first_snake.name} in front of you."
 combat_check
 
 if $in_combat == true
   puts "In combat with #{first_snake.name}"
   while player1.player_alive == true
-    #get input
-    puts "ATTACK or RUN"
-    input = gets.chomp.downcase
-    # if they run
-    if input == "run"
-      puts "You ran away"
+    if first_snake.snake_alive == false
       break
-    # if they fight
-    elsif input == "attack"
-      if first_snake.snake_alive == true
+    elsif first_snake.snake_alive == true
+      #get input
+      puts "ATTACK or RUN"
+      input = gets.chomp.downcase
+      if input == "run"
+        $in_combat == false
+        puts "You ran away"
+        break
+      elsif input == "attack"
         player1.hitpoints = player1.hitpoints - first_snake.damage
         first_snake.hitpoints = first_snake.hitpoints - player1.damage
-      puts "You attack the #{first_snake.name} for #{player1.damage} damage."
-      puts "The #{first_snake.name} attacks you for #{first_snake.damage} damage."
-      puts "Your health: #{player1.hitpoints}. #{first_snake.name}'s health: #{first_snake.hitpoints}"
-      puts "Player status: #{player1.player_alive}. #{first_snake.name} status: #{first_snake.snake_alive}"
-      elsif first_snake.snake_alive == false
-        puts "#{first_snake.name} is dead."
-        break
+        puts "You attack the #{first_snake.name} for #{player1.damage} damage."
+        puts "The #{first_snake.name} attacks you for #{first_snake.damage} damage."
+        puts "Your health: #{player1.hitpoints}. #{first_snake.name}'s health: #{first_snake.hitpoints}"
       end
     end
   end
 end
 
-
 # CODE FROM HERE IS AFTER user runs away from the snake
-puts "Combat ends"
+puts "You've finished combat with #{player1.hitpoints} HP left."
 
 #check if player is alive
 

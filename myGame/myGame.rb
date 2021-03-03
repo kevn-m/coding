@@ -6,6 +6,14 @@ class Player
     @hitpoints = hitpoints
     @damage = damage
   end
+
+  def is_alive
+    if @hitpoints > 0
+      return true
+    elsif @hitpoints < 0
+      return false
+    end
+  end
 end
 
 # Create a class of snakes with 2 attributes
@@ -17,13 +25,16 @@ class Snake
   end
 end
 
+# Asks if the player wants to run or fight, then sets in_combat accordingly
 def combat_check
   puts "What will you do? RUN or FIGHT?"
   input = gets.chomp.downcase
   if input == "fight"
     $in_combat = true
+    puts "You are in combat."
   elsif input == "run"
     $in_combat = false
+    puts "You've run away."
   end
 end
 
@@ -37,38 +48,33 @@ $in_combat = false
 puts "You are on a journey. Please type your responses as you go.\n.\n.\n."
 puts "Oh no! There's a snake in front of you."
 
+
 # Creates the first snake enemy - relatively weak with 10hp and 2dmg
-firstSnake = Snake.new(10,2)
+first_snake = Snake.new(10, 2)
 combat_check
 
 
 # created some logic to choose to attack or run from snake
-if $in_combat == true
-  while firstSnake.hitpoints > 0
-    puts "You're in battle with the Snake. It currently has #{firstSnake.hitpoints} hitpoints. Will you ATTACK or DO NOTHING or RUN?"
+while $in_combat == true
+  while first_snake.hitpoints > 0
+    puts "You're in battle with the Snake.\nIt currently has #{first_snake.hitpoints} hitpoints.\nYou have #{player1.hitpoints} hitpoints.\nWill you ATTACK or DO NOTHING or RUN?"
     input = gets.chomp.downcase
-    case input
+  case input
     when "attack"
-      puts "attacking..."
+      puts "ATTACKING..."
+      player1.hitpoints = player1.hitpoints - first_snake.damage
+      first_snake.hitpoints = first_snake.hitpoints - player1.damage
+      puts "Snake bit you for #{first_snake.damage}. You now have #{player1.hitpoints} hitpoints."
+      puts "You hit the snake for #{player1.damage}. The snake has #{first_snake.hitpoints} hitpoints left."
     when "do nothing"
-      puts "Snake attacks you"
+      puts "SNAKE ATTACKS YOU"
     when "run"
-      puts "You run away"
-    end
-    break
+      puts "YOU RUN AWAY"
+      $in_combat = false
+  end
+  $in_combat = false
   end
 end
 
-
-# while (firstSnake.hitpoints > 0 && in_combat == true)
-#   input = gets.chomp!.downcase
-#   if input == "fight"
-#   player1.hitpoints = player1.hitpoints - firstSnake.damage
-#   firstSnake.hitpoints = firstSnake.hitpoints - player1.damage
-#   puts "Snake bit you for #{firstSnake.damage}. You now have #{player1.hitpoints} hitpoints."
-#   puts "You hit the snake for #{player1.damage}. The snake has #{firstSnake.hitpoints} hitpoints left."
-#   elsif
-#   puts "You ran away!"
-#   in_combat = false
-#   puts in_combat
-#   end
+# CODE FROM HERE IS AFTER user runs away from the snake
+puts "Next level"

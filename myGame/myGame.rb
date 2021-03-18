@@ -50,13 +50,13 @@ end
 puts "Hello player. Please enter your name."
 playername = gets.chomp
 
-player1 = Player.new(playername, 100, 5)
+player1 = Player.new(playername, 100, rand(1..50))
 $in_combat = false
 
 puts "You are on a journey. Please type your responses as you go.\n.\n.\n."
 
 # Creates the first snake enemy - relatively weak with 10hp and 2dmg
-first_snake = Snake.new("Brown Snake", 10, 2)
+first_snake = Snake.new("Brown Snake", 100, rand(1..20))
 puts "Oh no! There's a #{first_snake.name} in front of you."
 combat_check
 
